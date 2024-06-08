@@ -6,35 +6,12 @@ import bitlearningAbi from "../contract/bitlearning.abi.json";
 import erc20Abi from "../contract/erc20.abi.json";
 
 const ERC20_DECIMALS = 18;
-const DTContractAddress = "0x9C87a0EeA7561ED90833E62Bdc1d9560761235aC";
+const DTContractAddress = "0xE87884DFb9Dd826673a4e31A750F46106b90B6E7";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
 let kit;
 let contract;
 let tutors = [];
-
-// Temp tutors
-tutors = [
-  {
-    index: 0,
-    tutorId: "1",
-    fullName: "Jane Doe",
-    sex: "Female",
-    subjects: ["Mathematics", "Physics"],
-    age: "29",
-    bio: "Passionate about teaching and helping students achieve their full potential. With a Master's degree in Physics and over 5 years of tutoring experience, I bring both knowledge and practical teaching skills to the table.",
-  },
-  {
-    index: 1,
-    tutorId: "2",
-    fullName: "John Smith",
-    sex: "Male",
-    subjects: ["Chemistry", "Biology"],
-    age: "32",
-    bio: "Dedicated and experienced tutor with a PhD in Chemistry. I've been tutoring high school and college students for 7 years, focusing on making complex concepts accessible and understandable.",
-  },
-];
-renderTutors();
 
 const connectCeloWallet = async function () {
   if (window.celo) {
@@ -173,15 +150,16 @@ document.querySelector("#newTutorBtn").addEventListener("click", async (e) => {
 document.querySelector("#marketplace").addEventListener("click", async (e) => {
   if (e.target.className.includes("bookBtn")) {
     const index = e.target.id;
+    const hours = 1; // You can adjust this or make it dynamic
     notification("⌛ Waiting for payment approval...");
     try {
-      await approve(new BigNumber(1).shiftedBy(ERC20_DECIMALS));
+      await approve(new BigNumber(1).shiftedBy(ERC20_DECIMALS).times(hours));
     } catch (error) {
       notification(`⚠️ ${error}.`);
     }
     notification(`⌛ Booking tutor "${tutors[index].fullName}"...`);
     try {
-      await contract.methods.bookTutor(index).send({ from: kit.defaultAccount });
+      await contract.methods.bookTutor(index, hours).send({ from: kit.defaultAccount });
       notification(`🎉 You successfully booked "${tutors[index].fullName}".`);
       getTutors();
       getBalance();

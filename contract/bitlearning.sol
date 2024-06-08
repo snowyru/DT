@@ -72,7 +72,7 @@ contract DecentrilizedTutors {
         emit ProfileMade(mssg);
     }
 
-    function getTutor(uint256 _index) public returns(
+    function getTutor(uint256 __index) public returns(
         address payable,
         string memory,
         string memory,
@@ -81,34 +81,38 @@ contract DecentrilizedTutors {
         string memory
         ) {
         emit NewTutor(
-            tutors[_index].tutorId,
-            tutors[_index].fullName,
-            tutors[_index].sex,
-            tutors[_index].subjects,
-            tutors[_index].age,
-            tutors[_index].bio
+            tutors[__index].tutorId,
+            tutors[__index].fullName,
+            tutors[__index].sex,
+            tutors[__index].subjects,
+            tutors[__index].age,
+            tutors[__index].bio
         );
         return (
-            tutors[_index].tutorId,
-            tutors[_index].fullName,
-            tutors[_index].sex,
-            tutors[_index].subjects,
-            tutors[_index].age,
-            tutors[_index].bio
+            tutors[__index].tutorId,
+            tutors[__index].fullName,
+            tutors[__index].sex,
+            tutors[__index].subjects,
+            tutors[__index].age,
+            tutors[__index].bio
         );
     }
 
-    function bookTutor(uint _index) public payable {
+    function bookTutor(uint __index, uint _hours) public payable {
 
         require(
             IERC20Token(cUsdTokenAddress).transferFrom(
                 msg.sender,
-                tutors[_index].tutorId,
-                tutors[_index].rate
+                tutors[__index].tutorId,
+                tutors[__index].rate * _hours
             ),
             "Transfer Failed!"
         );
         tutors[_index].rating++;
+    }
+
+    function getTotalTutors() public view returns (uint) {
+        return _index;
     }
 
 }
