@@ -1,3 +1,2 @@
-# DT
-Decentralized Tutoring Platform.
-testing
+# This is Bit learning - tutoring service
+comit frontend 
